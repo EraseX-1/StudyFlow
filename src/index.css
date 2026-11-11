@@ -1,0 +1,73 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+:root {
+  --ink: #12163a; --paper: #f3f5ff; --surface: #ffffff;
+  --brand: #5b3df5; --brand-dark: #4527d8; --accent: #06b6d4;
+  --btn-a: #6d4aff; --btn-b: #3b5bdb; --g1: #5b3df5; --g2: #0e7490;
+  --ease: cubic-bezier(.2, .8, .2, 1); color-scheme: light;
+}
+.dark {
+  --ink: #eef2ff; --paper: #070b1a; --surface: #0f1631;
+  --brand: #8b6cff; --brand-dark: #7656f0; --accent: #22d3ee;
+  --g1: #a78bfa; --g2: #22d3ee; color-scheme: dark;
+}
+@theme inline {
+  --color-ink: var(--ink); --color-paper: var(--paper); --color-surface: var(--surface);
+  --color-brand: var(--brand); --color-brand-dark: var(--brand-dark); --color-accent: var(--accent);
+  --font-sans: "Atkinson Hyperlegible", system-ui, sans-serif;
+}
+body { background: var(--paper); color: var(--ink); transition: background-color .2s, color .2s; }
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(48rem 24rem at 8% -8%, color-mix(in srgb, var(--brand) 24%, transparent), transparent),
+    radial-gradient(36rem 20rem at 100% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent);
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+@keyframes fade-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes drift { to { background-position: 100% 50%; } }
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(8px); } }
+@keyframes dialog-in { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes sheet-in { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+/* Custom utilities (Tailwind 4: only @utility classes can be used inside @apply) */
+@utility grad-bg {
+  background-image: linear-gradient(135deg, var(--btn-a), var(--btn-b));
+}
+@utility grad-text {
+  background-image: linear-gradient(90deg, var(--g1), var(--g2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@layer base {
+  h1 { @apply w-fit text-xl font-bold tracking-tight; background-image: linear-gradient(90deg, var(--g1), var(--g2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  h2 { @apply flex items-center gap-2 text-base font-bold; }
+  h2::before { content: ""; width: 3px; height: 1em; border-radius: 2px; background-image: linear-gradient(var(--brand), var(--accent)); }
+}
+@layer components {
+  .page { animation: fade-in .15s ease-out; }
+  .btn { @apply grad-bg inline-flex min-h-10 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-bold text-white transition duration-150 hover:brightness-110 active:scale-[.98] disabled:opacity-50; box-shadow: 0 8px 22px -10px color-mix(in srgb, var(--brand) 70%, transparent); }
+  .btn-quiet { @apply inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg border border-ink/15 bg-ink/5 px-3 py-1.5 text-sm font-semibold transition duration-150 hover:bg-ink/10 active:scale-[.98] disabled:opacity-50; }
+  .input { @apply min-h-10 w-full rounded-lg border border-ink/20 bg-ink/5 px-3 py-2 text-base transition-colors duration-200 focus:border-accent; }
+  .card { @apply rounded-xl border border-ink/10 bg-surface p-4 transition-colors duration-200; box-shadow: 0 1px 0 rgb(255 255 255 / .05) inset, 0 14px 30px -20px rgb(0 0 0 / .5); }
+  .glow { box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand) 35%, transparent), 0 24px 60px -24px color-mix(in srgb, var(--brand) 60%, transparent); }
+  .hero { @apply rounded-xl border border-ink/10 p-4; background: linear-gradient(135deg, color-mix(in srgb, var(--brand) 26%, var(--surface)), color-mix(in srgb, var(--accent) 12%, var(--surface))); }
+  .hero-anim { background-size: 200% 200%; animation: drift 9s ease-in-out infinite alternate; }
+  .person { @apply rounded-xl p-5; border: 1px solid color-mix(in srgb, var(--brand) 40%, transparent); background: linear-gradient(160deg, color-mix(in srgb, var(--brand) 22%, var(--surface)), var(--surface) 70%); transition: transform .2s var(--ease), box-shadow .2s var(--ease); }
+  .person:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -24px color-mix(in srgb, var(--brand) 80%, transparent); }
+  .rise { animation: rise .4s var(--ease) both; }
+  .toast-in { animation: toast-in .2s var(--ease); }
+  .toast-out { animation: toast-out .2s ease-in forwards; }
+  .dialog-in { animation: dialog-in .2s var(--ease); }
+  .sheet-in { animation: sheet-in .25s var(--ease); }
+  .overlay-in { animation: overlay-in .2s ease-out; }
+  .bar { transform-origin: left; animation: grow .6s var(--ease); }
+  .card-tap { @apply transition hover:-translate-y-px active:scale-[.99]; }
+  .skeleton { @apply animate-pulse rounded-lg bg-ink/10; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

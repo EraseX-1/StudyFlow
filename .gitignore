@@ -1,0 +1,15 @@
+node_modules
+dist
+.env
+
+# Private environment files
+.env
+.env.*
+!.env.example
+
+# Dependencies and build output
+node_modules/
+dist/
+
+# Local backups
+src_backup/
