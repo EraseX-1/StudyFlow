@@ -37,8 +37,8 @@ export default function Setup({ user, initial, onDone }) {
       <Choice label="English" value={english} onChange={setEnglish} options={[['184', 'Language and Literature'], ['101', 'Communicative']]} />
       <label className="flex items-center gap-2"><input type="checkbox" checked={ai} onChange={e => setAi(e.target.checked)} />I am taking Artificial Intelligence (417)</label>
       <p className="text-sm">Science, Social Science and Hindi Course A are included for everyone.</p>
-      {saved && initial && <p role="status" className="text-sm text-emerald-700 dark:text-emerald-300">Saved. Your progress is kept.</p>}
-      {err && <p role="alert" className="rounded-lg bg-rose-500/15 p-3 text-sm text-rose-700 dark:text-rose-300">{err}</p>}
+      {saved && initial && <p role="status" className="text-sm text-accent">Saved. Your progress is kept.</p>}
+      {err && <p role="alert" className="rounded-lg border border-ink/30 bg-ink/10 p-3 text-sm text-ink">{err}</p>}
       <button className="btn" disabled={busy}>{busy ? 'Saving…' : initial ? 'Save changes' : 'Start using StudyFlow'}</button>
     </form>
   )

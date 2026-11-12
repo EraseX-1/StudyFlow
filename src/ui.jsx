@@ -29,8 +29,8 @@ export function UiHost() {
     <>
       <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-20 z-40 flex flex-col items-center gap-2 px-4 md:bottom-6">
         {toasts.map(t => (
-          <div key={t.id} className={`pointer-events-auto flex max-w-sm items-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-semibold text-paper shadow-lg ${t.leaving ? 'toast-out' : 'toast-in'}`}>
-            {t.kind === 'error' ? <AlertCircle size={18} /> : <CheckCircle2 size={18} className="text-emerald-400" />}{t.text}
+          <div key={t.id} className={`pointer-events-auto flex max-w-sm items-center gap-2 rounded-lg ${t.kind === 'error' ? 'bg-ink text-paper' : 'bg-brand text-[#0B0B0C]'} px-4 py-2.5 text-sm font-semibold shadow-lg ${t.leaving ? 'toast-out' : 'toast-in'}`}>
+            {t.kind === 'error' ? <AlertCircle size={18} /> : <CheckCircle2 size={18} />}{t.text}
           </div>
         ))}
       </div>

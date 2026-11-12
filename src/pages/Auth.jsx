@@ -2,9 +2,18 @@ import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { supabase } from '../supabase'
 
-const Msg = ({ m }) => m && <p role="alert" className={`rounded-lg p-3 text-sm ${m.ok ? 'bg-emerald-500/150/15 text-emerald-700 dark:text-emerald-300' : 'bg-rose-500/150/15 text-rose-700 dark:text-rose-300'}`}>{m.text}</p>
+const Msg = ({ m }) => m && <p role="alert" className={`rounded-lg p-3 text-sm ${m.ok ? 'border border-brand/40 bg-brand/150/15 text-accent' : 'border border-ink/30 bg-ink/100/15 text-ink'}`}>{m.text}</p>
 const strong = p => p.length >= 8 && /\d/.test(p) && /[a-zA-Z]/.test(p)
 const PW_RULE = 'Password needs 8+ characters with letters and numbers.'
+const friendly = e => {
+  const m = (e?.message || '').toLowerCase()
+  if (m.includes('invalid login')) return 'That email or password is not right. Please try again.'
+  if (m.includes('not confirmed')) return 'Please verify your email first. Check your inbox for the link.'
+  if (m.includes('already registered') || m.includes('already been registered')) return 'An account with this email already exists. Try logging in.'
+  if (m.includes('rate limit') || e?.status === 429) return 'Too many attempts. Please wait a minute and try again.'
+  if (m.includes('fetch') || m.includes('network')) return 'No internet connection. Check your network and try again.'
+  return e?.message || 'Something went wrong. Please try again.'
+}
 
 export default function Auth() {
   const [mode, setMode] = useState('login')
@@ -33,7 +42,7 @@ export default function Auth() {
       ok = 'If that email has an account, a reset link is on its way.'
     }
     setBusy(false)
-    setMsg(error ? { text: error.message } : ok ? { ok: true, text: ok } : null)
+    setMsg(error ? { text: friendly(error) } : ok ? { ok: true, text: ok } : null)
   }
 
   const title = { login: 'Log in', signup: 'Create your account', reset: 'Reset your password' }[mode]
@@ -74,7 +83,7 @@ export function NewPassword({ onDone }) {
     e.preventDefault()
     if (!strong(pw)) return setMsg({ text: PW_RULE })
     const { error } = await supabase.auth.updateUser({ password: pw })
-    error ? setMsg({ text: error.message }) : onDone()
+    error ? setMsg({ text: friendly(error) }) : onDone()
   }
   return (
     <form onSubmit={submit} className="card glow mt-8 flex flex-col gap-3">

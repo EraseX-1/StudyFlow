@@ -52,7 +52,7 @@ export default function Planner({ profile }) {
   const done = t => patch(t, { status: 'done', done_at: new Date().toISOString() }, 'Marked done.')
   const postpone = t => patch(t, { planned_date: addDays(t.planned_date < today ? today : t.planned_date, 1), start_time: null, end_time: null }, 'Moved to the next day.')
   const cancel = async t => (await ask('Cancel this task? It stays in your history.')) && patch(t, { status: 'cancelled' }, 'Task cancelled.')
-  const fixMissed = () => run(() => supabase.rpc('reschedule_missed'), n => `${n} missed task${n === 1 ? '' : 's'} moved to days with room.`)
+  const fixMissed = () => run(() => supabase.rpc('reschedule_missed', { p_today: today }), n => `${n} missed task${n === 1 ? '' : 's'} moved to days with room.`)
 
   const subj = id => subjects.find(s => s.id === id)
   const chap = id => chapters.find(c => c.id === id)
@@ -76,8 +76,8 @@ export default function Planner({ profile }) {
     <section className="flex flex-col gap-3">
       <h1>Planner</h1>
       <p className="text-sm text-ink/70">Plan study tasks for chapters you have unlocked. A day holds at most 6 hours. Revisions due appear here too and are managed on the Revision page.</p>
-      {err && <p role="alert" className="rounded-lg bg-rose-500/15 p-3 text-sm text-rose-700 dark:text-rose-300">{err}</p>}
-      {msg && <p role="status" className="rounded-lg bg-emerald-500/15 p-3 text-sm text-emerald-700 dark:text-emerald-300">{msg}</p>}
+      {err && <p role="alert" className="rounded-lg border border-ink/30 bg-ink/10 p-3 text-sm text-ink">{err}</p>}
+      {msg && <p role="status" className="rounded-lg border border-brand/40 bg-brand/15 p-3 text-sm text-accent">{msg}</p>}
       {missed.length > 0 && <div className="card flex flex-wrap items-center gap-2"><span className="flex-1">{missed.length} task{missed.length > 1 ? 's' : ''} from earlier days not done. No problem.</span><button className="btn" disabled={busy} onClick={fixMissed}>Spread them over coming days</button></div>}
       {tasks && chapters.length === 0 && <div className="card"><p className="font-bold">No unlocked chapters to plan yet.</p><p className="text-sm">Open the Syllabus, and chapters will appear here once they are unlocked.</p></div>}
       {top.length > 0 && <div className="card flex flex-col gap-2">

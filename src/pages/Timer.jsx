@@ -76,7 +76,7 @@ export default function Timer({ profile }) {
         <select className="input" value={t ? t.type ?? 'learning' : type} disabled={!!t} onChange={e => setType(e.target.value)} aria-label="Session type">
           <option value="learning">Learning</option><option value="practice">Practice</option><option value="revision">Revision</option><option value="mock_test">Mock test</option>
         </select>
-        <p className={`text-5xl font-bold tabular-nums transition-colors duration-200 ${t?.since ? 'text-brand' : ''}`}>{fmt(elapsed)}</p>
+        <div className={`grid size-52 place-items-center rounded-full border-4 transition-colors duration-300 ${t?.since ? 'border-brand glow' : 'border-ink/15'}`}><p className="text-4xl font-bold tabular-nums">{fmt(elapsed)}</p></div>
         <div className="flex flex-wrap justify-center gap-2">
           {!t && <button className="btn min-h-12 px-8 text-base" disabled={!subjectId} onClick={start}><Play size={18} />Start</button>}
           {t?.since && <button className="btn-quiet" onClick={pause}><Pause size={16} />Pause</button>}

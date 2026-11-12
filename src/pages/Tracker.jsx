@@ -3,8 +3,8 @@ import { CheckCircle2, Circle, Lock } from 'lucide-react'
 import { supabase } from '../supabase'
 import { ask, toast } from '../ui'
 
-const DIFF = { easy: 'Easy', medium: 'Medium', hard: 'Hard', very_hard: 'Very hard' }
-const DIFF_CLS = { easy: 'bg-emerald-500/150/15 text-emerald-700 dark:text-emerald-300', medium: 'bg-sky-500/15 text-sky-700 dark:text-sky-300', hard: 'bg-amber-500/15 text-amber-700 dark:text-amber-300', very_hard: 'bg-rose-500/150/15 text-rose-700 dark:text-rose-300' }
+const DIFF = { easy: '●○○○ Easy', medium: '●●○○ Medium', hard: '●●●○ Hard', very_hard: '●●●● Very hard' }
+const DIFF_CLS = Object.fromEntries(['easy', 'medium', 'hard', 'very_hard'].map(k => [k, 'border border-ink/25 text-ink']))
 
 export default function Tracker({ profile }) {
   const [subjects, setSubjects] = useState([])
@@ -50,10 +50,10 @@ export default function Tracker({ profile }) {
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1" role="tablist">
         {subjects.map(s => (
           <button key={s.id} role="tab" aria-selected={s.id === active} onClick={() => setActive(s.id)}
-            className={`shrink-0 whitespace-nowrap rounded-lg transition-colors px-3 py-1.5 text-sm font-bold ${s.id === active ? 'grad-bg text-white' : 'border border-ink/20 bg-surface'}`}>{s.name}</button>
+            className={`shrink-0 whitespace-nowrap rounded-lg transition-colors px-3 py-1.5 text-sm font-bold ${s.id === active ? 'grad-bg' : 'border border-ink/20 bg-surface'}`}>{s.name}</button>
         ))}
       </div>
-      {err && <p role="alert" className="rounded-lg bg-rose-500/15 p-3 text-sm text-rose-700 dark:text-rose-300">{err}</p>}
+      {err && <p role="alert" className="rounded-lg border border-ink/30 bg-ink/10 p-3 text-sm text-ink">{err}</p>}
       {chapters && chapters.length > 0 && (
         <div>
           <p className="text-sm font-bold">{done} of {chapters.length} chapters completed</p>
@@ -70,7 +70,7 @@ export default function Tracker({ profile }) {
         <input className="input flex-1" type="search" placeholder="Search chapters" aria-label="Search chapters" value={q} onChange={e => setQ(e.target.value)} />
         <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={hideDone} onChange={e => setHideDone(e.target.checked)} />Hide completed</label>
       </div>}
-      {chapters?.some(c => !c.verified) && <p className="text-sm text-amber-700 dark:text-amber-300">This chapter list was supplied by the project owner and has not yet been checked against the official 2026–27 CBSE syllabus. Difficulty labels are estimates. Change any chapter to match your own experience.</p>}
+      {chapters?.some(c => !c.verified) && <p className="text-sm text-ink/80">This chapter list was supplied by the project owner and has not yet been checked against the official 2026–27 CBSE syllabus. Difficulty labels are estimates. Change any chapter to match your own experience.</p>}
       <ul className="flex flex-col gap-2">
         {shown?.map((c, i) => {
           const prev = chapters.filter(x => x.section === c.section && x.number < c.number).at(-1)
@@ -79,7 +79,7 @@ export default function Tracker({ profile }) {
             {c.section && c.section !== shown[i - 1]?.section && <li className="mt-2 text-lg font-bold">{c.section}</li>}
             <li className={`card flex flex-col gap-2 ${c.status === 'completed' ? 'border-l-4 border-l-brand' : !c.unlocked ? 'border-dashed' : ''}`}>
               <div className="flex items-start gap-3">
-                <span className="mt-0.5" aria-hidden>{c.status === 'completed' ? <CheckCircle2 className="text-brand" /> : c.unlocked ? <Circle /> : <Lock className="text-ink/50" />}</span>
+                <span className="mt-0.5" aria-hidden>{c.status === 'completed' ? <CheckCircle2 className="text-accent" /> : c.unlocked ? <Circle /> : <Lock className="text-ink/50" />}</span>
                 <div className="flex-1">
                   <p className="font-bold">Chapter {c.number}: {c.title}</p>
                   <p className="text-sm text-ink/70">{[c.category, `about ${Math.round(c.est_minutes / 6) / 10} h (estimate)`, c.difficulty_changed && 'your difficulty'].filter(Boolean).join(' · ')}</p>

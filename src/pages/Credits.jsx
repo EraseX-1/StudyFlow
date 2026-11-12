@@ -34,16 +34,22 @@ export default function Credits() {
         <span className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-ink/5 px-3 py-1 text-xs font-bold"><Sparkles size={14} className="text-accent" />Team &amp; Credits</span>
         <h1 className="mx-auto text-3xl md:text-4xl">Meet the People Behind StudyFlow</h1>
         <p className="max-w-md text-ink/80">Built with creativity, collaboration and a shared vision to make studying simpler and smarter.</p>
+        <p className="text-sm font-bold text-ink/70">StudyFlow · Built by Xreton Studios</p>
         <div className="flex flex-wrap justify-center gap-2">
           {[['leadership', 'Leadership'], ['credits', 'Credits'], ['contributions', 'Contributions'], ['contact', 'Contact']].map(([id, t]) => <button key={id} className="btn-quiet" onClick={() => go(id)}>{t}</button>)}
         </div>
       </section>
 
+      <section id="vision" className="flex scroll-mt-16 flex-col gap-3">
+        <h2>Product vision</h2>
+        <div className="card rise"><p className="grad-text text-xl font-bold">Track Your Progress. Master Your Syllabus.</p><p className="mt-2 text-sm text-ink/80">StudyFlow helps CBSE Class 10 students follow their syllabus, plan their study time and prepare for the board exams.</p></div>
+      </section>
+
       <section id="leadership" className="flex scroll-mt-16 flex-col gap-3">
-        <h2>Leadership</h2>
+        <h2>Founding team</h2>
         <div className="grid gap-3 md:grid-cols-5">
           <article className="person rise md:col-span-3" style={delay(1)}>
-            <span className="grad-bg mb-4 grid size-11 place-items-center rounded-xl text-white"><Crown size={22} /></span>
+            <span className="grad-bg mb-4 grid size-11 place-items-center rounded-xl"><Crown size={22} /></span>
             <p className="text-xs font-bold uppercase tracking-widest text-accent">Founder</p>
             <p className="mt-1 text-3xl font-bold">Novi Chunk</p>
           </article>
@@ -56,7 +62,7 @@ export default function Credits() {
       </section>
 
       <section id="credits" className="flex scroll-mt-16 flex-col gap-3">
-        <h2>Project &amp; Development Credits</h2>
+        <h2>Development and design direction</h2>
         <div className="card divide-y divide-ink/10 p-0">
           {CREDITS.map(([k, v], i) => (
             <div key={k} className="rise flex items-center justify-between gap-3 px-4 py-3" style={delay(i)}>
@@ -71,7 +77,7 @@ export default function Credits() {
         <div className="grid gap-2 sm:grid-cols-2">
           {CATS.map(([t, Icon], i) => (
             <div key={t} className="card rise flex items-center gap-3 p-3 transition hover:-translate-y-px" style={delay(i)}>
-              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-brand/15 text-brand"><Icon size={18} /></span>
+              <span className="grid size-9 shrink-0 place-items-center rounded-lg grad-bg"><Icon size={18} /></span>
               <span className="flex-1 text-sm font-semibold">{t}</span>
               <span className="rounded-full border border-ink/15 px-2 py-0.5 text-xs text-ink/70">Coming Soon</span>
             </div>
@@ -80,8 +86,18 @@ export default function Credits() {
         <p className="text-sm text-ink/70">Names appear here once contributors and their contributions are confirmed.</p>
       </section>
 
+      <section id="tools" className="flex scroll-mt-16 flex-col gap-3">
+        <h2>Technology and tools</h2>
+        <div className="flex flex-wrap gap-2">{['React', 'Vite', 'Tailwind CSS', 'React Router', 'Supabase', 'Lucide Icons'].map(t => <span key={t} className="rounded-full border border-ink/15 bg-ink/5 px-3 py-1 text-sm font-semibold">{t}</span>)}</div>
+      </section>
+
+      <section id="thanks" className="flex scroll-mt-16 flex-col gap-3">
+        <h2>Special thanks</h2>
+        <div className="card flex items-center justify-between gap-3"><span className="text-sm text-ink/80">Names will be added here once confirmed.</span><span className="rounded-full border border-ink/15 px-2 py-0.5 text-xs text-ink/70">Coming Soon</span></div>
+      </section>
+
       <section id="contact" className="glow card flex scroll-mt-16 flex-col gap-3 p-5">
-        <span className="grad-bg grid size-11 place-items-center rounded-xl text-white"><Mail size={22} /></span>
+        <span className="grad-bg grid size-11 place-items-center rounded-xl"><Mail size={22} /></span>
         <h2>For Any Bugs or Suggestions Contact</h2>
         <p className="text-sm text-ink/80">Found a bug, or have an idea that would make StudyFlow better? Send it to this address.</p>
         <p className="break-all rounded-lg border border-ink/15 bg-ink/5 px-3 py-2 font-bold">{EMAIL}</p>

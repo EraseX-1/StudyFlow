@@ -28,7 +28,7 @@ export default function Revision({ profile }) {
 
   async function run(fn) { setBusy(true); setErr(''); const { error } = await fn(); if (error) setErr(error.message); await load(); setBusy(false) }
   const schedule = () => { const t = new Date(); t.setDate(t.getDate() + 1); run(() => supabase.rpc('schedule_revision', { p_chapter: pick, p_due: ymd(t) })) }
-  const finish = t => run(() => supabase.rpc('complete_revision', { p_task: t.id }))
+  const finish = t => run(() => supabase.rpc('complete_revision', { p_task: t.id, p_today: ymd(new Date()) }))
   const remove = async t => (await ask('Remove this revision from your list?')) && run(() => supabase.from('revision_tasks').delete().eq('id', t.id))
 
   const today = ymd(new Date())
@@ -46,7 +46,7 @@ export default function Revision({ profile }) {
     <section className="flex flex-col gap-3">
       <h1>Revision</h1>
       <p className="text-sm text-ink/70">Revise finished chapters again so you remember them. After each revision, the next one is set for 3, 7, 14, then 30 days later. Revision never changes a chapter's completed status.</p>
-      {err && <p role="alert" className="rounded-lg bg-rose-500/15 p-3 text-sm text-rose-700 dark:text-rose-300">{err}</p>}
+      {err && <p role="alert" className="rounded-lg border border-ink/30 bg-ink/10 p-3 text-sm text-ink">{err}</p>}
       <div className="card flex flex-col gap-2">
         <h2 className="font-bold">Schedule a revision</h2>
         {choices.length === 0 ? <p className="text-sm">Complete a chapter first. Completed chapters appear here.</p> : <>

@@ -12,6 +12,17 @@ export default function Notes({ profile }) {
   const [status, setStatus] = useState('')
   const [err, setErr] = useState('')
   const ver = useRef(0)
+  const live = useRef(null)
+  live.current = { sel, dirty }
+  useEffect(() => () => {   // leaving the page with unsaved text: save it now instead of losing it
+    const { sel: s, dirty: d } = live.current
+    if (d && s) supabase.from('study_notes').update({ title: s.title, body: s.body, chapter_id: s.chapter_id || null, updated_at: new Date().toISOString() }).eq('id', s.id).then(() => {})
+  }, [])
+  useEffect(() => {
+    if (!dirty) return
+    const h = e => { e.preventDefault(); e.returnValue = '' }
+    addEventListener('beforeunload', h); return () => removeEventListener('beforeunload', h)
+  }, [dirty])
 
   useEffect(() => {
     supabase.from('study_notes').select('*').order('updated_at', { ascending: false }).then(({ data, error }) => error ? setErr(error.message) : setNotes(data))
@@ -51,7 +62,7 @@ export default function Notes({ profile }) {
     <section className="flex flex-col gap-3">
       <h1>Notes</h1>
       <p className="text-sm text-ink/70">Private notes, saved automatically. Link a note to a chapter if you like.</p>
-      {err && <p role="alert" className="rounded-lg bg-rose-500/15 p-3 text-sm text-rose-700 dark:text-rose-300">{err}</p>}
+      {err && <p role="alert" className="rounded-lg border border-ink/30 bg-ink/10 p-3 text-sm text-ink">{err}</p>}
       <div className="flex gap-2">
         <input className="input" placeholder="Search notes" value={q} onChange={e => setQ(e.target.value)} aria-label="Search notes" />
         <button className="btn" onClick={add}><Plus size={18} />New note</button>
